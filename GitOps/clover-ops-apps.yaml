@@ -1,0 +1,61 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: clover-apps-prod
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      directories:
+      - path: overlays/prd
+        # exclude: true
+      repoURL: https://github.com/MellouliiAhmed/SocialMedia_MernApp-Ops.git
+      revision: HEAD
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  template:
+    metadata:
+      name: clover-prd
+    spec:
+      destination:
+        namespace: clover-prd
+        server: https://kubernetes.default.svc
+      project: clover
+      source:
+        path: overlays/prd
+        repoURL: https://github.com/MellouliiAhmed/SocialMedia_MernApp-Ops.git
+        targetRevision: HEAD
+      syncPolicy:
+        automated:
+          selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: clover-apps-nonprod
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      directories:
+      - path: overlays/stg
+      repoURL: https://github.com/MellouliiAhmed/SocialMedia_MernApp-Ops.git
+      revision: HEAD
+  syncPolicy:
+    preserveResourcesOnDeletion: true
+  template:
+    metadata:
+      name: clover-stg
+    spec:
+      destination:
+        namespace: clover-stg
+        server: https://kubernetes.default.svc
+      project: clover
+      source:
+        path: overlays/stg
+        repoURL: https://github.com/MellouliiAhmed/SocialMedia_MernApp-Ops.git
+        targetRevision: HEAD
+      syncPolicy:
+        automated:
+          selfHeal: true
+

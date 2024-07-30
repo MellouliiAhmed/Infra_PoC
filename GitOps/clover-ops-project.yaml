@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: clover
+  namespace: argocd
+spec:
+  description: Project for Clover applications
+  sourceRepos:
+    - https://github.com/MellouliiAhmed/SocialMedia_MernApp-Ops.git
+  destinations:
+    - namespace: clover-prd
+      server: https://kubernetes.default.svc
+    - namespace: clover-stg
+      server: https://kubernetes.default.svc
+
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
